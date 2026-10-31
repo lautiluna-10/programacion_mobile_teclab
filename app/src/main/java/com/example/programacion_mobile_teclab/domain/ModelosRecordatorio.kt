@@ -19,36 +19,34 @@ sealed class EstadoRecordatorio(val descripcion: String) {
     object Completado : EstadoRecordatorio("Completado")
 }
 
-sealed class EstadoPantalla {
-    object Inicial : EstadoPantalla()
-    object Cargando : EstadoPantalla()
-    data class Exito(val recordatorios: List<Recordatorio>) : EstadoPantalla()
-    data class Error(val mensaje: String) : EstadoPantalla()
-}
-
 data class Recordatorio(
     val id: Long,
     val titulo: String,
+    val descripcion: String,
     val categoria: Categoria,
     val prioridad: Prioridad,
-    val estado: EstadoRecordatorio,
+    val estado: EstadoRecordatorio = EstadoRecordatorio.Pendiente,
     val ubicacionOpcional: String? = null,
     val avisoOpcional: String? = null
 )
 
-object RepositorioSimulado {
+object CatalogosDominio {
+    val catTrabajo = Categoria(1, "Trabajo")
+    val catEstudio = Categoria(2, "Estudio")
+    val catPersonal = Categoria(3, "Personal")
+    val catSalud = Categoria(4, "Salud")
 
-    private val catTrabajo = Categoria(1, "Trabajo")
-    private val catEstudio = Categoria(2, "Estudio")
-    private val catPersonal = Categoria(3, "Personal")
-    private val catSalud = Categoria(4, "Salud")
-
-    val categoriasUnicas: Set<Categoria> = setOf(
+    val categoriasDisponibles: Set<Categoria> = setOf(
         catTrabajo,
         catEstudio,
         catPersonal,
-        catSalud,
-        catTrabajo
+        catSalud
+    )
+
+    val prioridadesDisponibles: List<Prioridad> = listOf(
+        Prioridad.Alta,
+        Prioridad.Media,
+        Prioridad.Baja
     )
 
     val coloresPorCategoria: Map<String, Color> = mapOf(
@@ -57,51 +55,4 @@ object RepositorioSimulado {
         "Personal" to Color(0xFF43A047),
         "Salud" to Color(0xFFE53935)
     )
-
-    val listaRecordatorios: List<Recordatorio> = listOf(
-        Recordatorio(
-            id = 1L,
-            titulo = "Entregar Actividad 1 de Mobile",
-            categoria = catEstudio,
-            prioridad = Prioridad.Alta,
-            estado = EstadoRecordatorio.EnCurso,
-            ubicacionOpcional = "Plataforma virtual",
-            avisoOpcional = "Hoy 23:59 hs"
-        ),
-        Recordatorio(
-            id = 2L,
-            titulo = "Revisión de servidores regionales",
-            categoria = catTrabajo,
-            prioridad = Prioridad.Alta,
-            estado = EstadoRecordatorio.Pendiente,
-            ubicacionOpcional = "Oficina Central",
-            avisoOpcional = "Mañana 09:00 hs"
-        ),
-        Recordatorio(
-            id = 3L,
-            titulo = "Comprar repuestos de impresora",
-            categoria = catPersonal,
-            prioridad = Prioridad.Baja,
-            estado = EstadoRecordatorio.Pendiente,
-            ubicacionOpcional = null,
-            avisoOpcional = null
-        ),
-        Recordatorio(
-            id = 4L,
-            titulo = "Control anual veterinario",
-            categoria = catSalud,
-            prioridad = Prioridad.Media,
-            estado = EstadoRecordatorio.Completado,
-            ubicacionOpcional = "Clínica Veterinaria",
-            avisoOpcional = "18:00 hs"
-        )
-    )
-
-    fun filtrarPorEstado(estadoBuscado: EstadoRecordatorio): List<Recordatorio> {
-        return listaRecordatorios.filter { it.estado == estadoBuscado }
-    }
-
-    fun filtrarPorPrioridad(prioridadBuscada: Prioridad): List<Recordatorio> {
-        return listaRecordatorios.filter { it.prioridad == prioridadBuscada }
-    }
 }

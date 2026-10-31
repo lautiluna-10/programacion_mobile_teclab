@@ -4,14 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
-import com.example.programacion_mobile_teclab.ui.PantallaRecordatorios
+import com.example.programacion_mobile_teclab.ui.RecordatoriosApp
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                PantallaRecordatorios()
+                RecordatoriosApp()
             }
         }
     }
